@@ -1,0 +1,240 @@
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+  color: #1f2937;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+:focus-visible {
+  outline: 2px solid #d48103;
+  outline-offset: 2px;
+}
+
+/* Prefer-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body.reduce-motion * {
+  animation: none !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* =========================
+   2. TIPOGRAFIA E LINKS
+========================= */
+a, button, input, select, textarea, .card, .btn {
+  transition: all 0.25s ease;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* =========================
+   3. ANIMAÇÕES
+========================= */
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  animation: slideInUp 0.35s ease-out both;
+}
+
+section, .hero, .card-grid {
+  opacity: 0;
+  animation: slideInUp 0.4s ease forwards;
+}
+section.delay-1 { animation-delay: 0.08s; }
+section.delay-2 { animation-delay: 0.12s; }
+
+/* =========================
+   4. CARTÕES
+========================= */
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(113, 119, 196, 0.568);
+}
+
+.cartao-lista:hover {
+  transform: translateX(4px);
+}
+
+/* =========================
+   5. BOTÕES
+========================= */
+.btn {
+  border-radius: 999px;
+  line-height: 1.2;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(74, 101, 151, 0.795);
+}
+.btn:hover { transform: translateY(-1px) scale(1.02); }
+.btn:active { transform: translateY(0) scale(0.99); }
+
+/* Ripple fallback */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  opacity: 0.2;
+  background: #ffffff;
+  transform: scale(1);
+  top: 50%;
+  left: 50%;
+  transition: width 0.4s ease, height 0.4s ease, opacity 0.6s ease;
+}
+.btn-ripple:active::after {
+  width: 200px;
+  height: 200px;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: 0s;
+}
+
+/* =========================
+   6. INPUTS E FORMULÁRIOS
+========================= */
+input, textarea, select {
+  border: 1px solid #dde9eb;
+  border-radius: 0.6rem;
+  box-shadow: inset 0 0 0 rgb(235, 96, 4);
+  color: #000; /* garante texto preto */
+}
+
+input:focus, textarea:focus, select:focus, button:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 4px rgba(233, 118, 10, 0.952);
+}
+
+/* =========================
+   7. TABELAS
+========================= */
+table tbody tr {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.08);
+  transform: translateX(2px);
+}
+
+/* =========================
+   8. HEADER
+========================= */
+header.sticky {
+  box-shadow: 0 6px 20px rgb(88, 74, 167);
+}
+
+/* =========================
+   9. BOTÃO MOBILE (HAMBURGER)
+========================= */
+#mobileMenuButton {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.25);
+  padding: 0;
+  cursor: pointer;
+}
+
+#mobileMenuButton span {
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  margin-bottom: 4px;
+}
+
+#mobileMenuButton span:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================
+   10. NAV MOBILE
+========================= */
+#mobileNav.hidden { display: none !important; }
+#mobileNav:not(.hidden) { display: block; }
+
+/* =========================
+   11. CARROSSEL
+========================= */
+.carousel-item {
+  transition: all 0.25s ease;
+  border-radius: 14px;
+}
+.carousel-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.4);
+}
+.carousel-item img {
+  transition: all 0.25s ease;
+}
+.carousel-item:hover img {
+  transform: scale(1.05);
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.25);
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+.carousel-button.left { left: 16px; }
+.carousel-button.right { right: 16px; }
+
+.carousel-button:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 768px) {
+  .carousel-button { width: 42px; height: 42px; }
+}

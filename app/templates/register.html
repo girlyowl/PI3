@@ -1,7 +1,9 @@
+Não é necessário repetir. Para que seus campos fiquem com o texto preto, basta adicionar text-black na versão original dos inputs e remover essas duplicatas. Ficaria assim:
+
 {% extends 'base.html' %}
 {% block title %}Registrar{% endblock %}
 {% block content %}
-  <div class="max-w-md mx-auto mt-12 bg-white p-8 rounded-lg shadow-md">
+  <div class="max-w-md mx-auto mt-12 bg-white p-8 rounded-lg shadow-md fade-in-up">
     <h2 class="text-2xl font-bold text-center text-indigo-600 mb-6">Cadastro de Usuário</h2>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -11,20 +13,20 @@
       {% endif %}
     {% endwith %}
     <form method="POST">
-      <div>
-        <label for="nome">Nome</label>
-        <input type="text" name="nome" id="nome" required class="mt-1 block w-full px-4 py-2 border rounded focus:border-orange-500 focus:ring-orange-500">
-      </div>
-      <div>
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" required class="mt-1 block w-full px-4 py-2 border rounded focus:border-orange-500 focus:ring-orange-500">
-      </div>
-      <div class="mt-4">
-        <label for="senha">Senha</label>
-        <input type="password" name="senha" id="senha" required class="mt-1 block w-full px-4 py-2 border rounded focus:border-orange-500 focus:ring-orange-500">
-      </div>
-      <div class="mt-6 text-center">
-        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">Cadastrar</button>
+  
+      <label class="block text-gray-700 mb-1">Nome</label>
+      <input type="text" name="nome" class="w-full border px-3 py-2 rounded mb-3 text-black">
+
+      <label class="block text-gray-700 mb-1">E-mail</label>
+      <input type="email" name="email" class="w-full border px-3 py-2 rounded mb-3 text-black">
+
+      <label class="block text-gray-700 mb-1">Senha</label>
+      <input type="password" name="senha" class="w-full border px-3 py-2 rounded text-black">
+
+      <div class="mt-6">
+        <button type="submit" class="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-orange-500 btn btn-ripple">
+          Registrar
+        </button>
       </div>
     </form>
   </div>

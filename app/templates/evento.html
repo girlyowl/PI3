@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
-{% block title %}{{ evento.titulo }} — Evento{% endblock %}
+{% block title %}{{ evento.titulo if evento else 'Evento' }} — Evento{% endblock %}
 
 {% block content %}
+{% if evento %}
 <article class="max-w-4xl mx-auto">
 
- {% if evento.imagem %}
-  <img src="{{ url_for('main.uploaded_file', filename=evento.imagem) }}" 
-       alt="{{ evento.titulo }}" 
-       class="w-full h-64 object-cover rounded-lg">
-{% else %}
-  <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-    <span class="text-gray-500">Sem imagem</span>
-  </div>
-{% endif %}
+  {% if evento.imagem %}
+    <img src="/uploads/{{ evento.imagem }}" 
+         alt="{{ evento.titulo }}" 
+         class="w-full h-64 object-cover rounded-lg">
+  {% else %}
+    <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+      <span class="text-gray-500">Sem imagem</span>
+    </div>
+  {% endif %}
 
   <div class="p-6">
     <p class="text-sm text-gray-600 mb-2">
@@ -35,11 +36,12 @@
         <a href="{{ url_for('evento.editar_evento', evento_id=evento.id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
           Editar
         </a>
-        <a href="{{ url_for('evento.excluir_evento', evento_id=evento.id) }}"
-           onclick="return confirm('Deseja excluir este evento?')"
-           class="bg-red-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
-          Excluir
-        </a>
+        <form method="POST" action="{{ url_for('evento.excluir_evento', evento_id=evento.id) }}" style="display: inline;"
+              onsubmit="return confirm('Deseja excluir este evento?');">
+          <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
+            Excluir
+          </button>
+        </form>
       {% endif %}
     </div>
 
@@ -48,19 +50,19 @@
       <p class="text-sm font-semibold mb-2">Compartilhar:</p>
 
       <div class="flex gap-3">
-        <a href="https://api.whatsapp.com/send?text={{ share_text }}"
+        <a href="https://api.whatsapp.com/send?text={{ evento.titulo }} - {{ request.base_url }}"
            target="_blank"
            class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
           WhatsApp
         </a>
 
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url }}"
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.base_url }}"
            target="_blank"
            class="bg-blue-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
           Facebook
         </a>
 
-        <a href="https://twitter.com/intent/tweet?text={{ evento.titulo }}&url={{ share_url }}"
+        <a href="https://twitter.com/intent/tweet?text={{ evento.titulo }}&url={{ request.base_url }}"
            target="_blank"
            class="bg-black text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
           X (Twitter)
@@ -69,4 +71,12 @@
     </div>
   </div>
 </article>
+{% else %}
+<div class="max-w-4xl mx-auto p-6 text-center">
+  <p class="text-lg text-gray-600 mb-4">Evento não encontrado.</p>
+  <a href="{{ url_for('main.index') }}" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition">
+    Voltar para a Página Inicial
+  </a>
+</div>
+{% endif %}
 {% endblock %}

@@ -1,85 +1,93 @@
 {% extends 'base.html' %}
 {% block title %}Eventos{% endblock %}
+
 {% block content %}
-<div class="max-w-6xl mx-auto space-y-8">
+<div class="max-w-6xl mx-auto space-y-8 fade-in-up">
+
+  <!-- Filtro de eventos -->
   <form method="GET" action="{{ url_for('main.index') }}" class="flex flex-wrap gap-2 mb-4 justify-center">
-    <input type="text" name="cidade" placeholder="Cidade" value="{{ cidade }}" class="border rounded px-2 py-1 focus:border-orange-500 focus:ring-orange-500" />
-    <input type="date" name="data_inicio" value="{{ data_inicio }}" class="border rounded px-2 py-1 focus:border-orange-500 focus:ring-orange-500" />
-    <input type="date" name="data_fim" value="{{ data_fim }}" class="border rounded px-2 py-1 focus:border-orange-500 focus:ring-orange-500" />
-    <button type="submit" class="bg-indigo-600 text-white px-4 py-1 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">Filtrar</button>
+    <input type="text" name="cidade" placeholder="Cidade" value="{{ cidade }}" 
+           class="border rounded px-2 py-1 focus:border-orange-500 focus:ring-orange-500" />
+    <input type="date" name="data_inicio" value="{{ data_inicio }}" 
+           class="border rounded px-2 py-1 focus:border-orange-500 focus:ring-orange-500" />
+    <input type="date" name="data_fim" value="{{ data_fim }}" 
+           class="border rounded px-2 py-1 focus:border-orange-500 focus:ring-orange-500" />
+    <button type="submit" class="bg-indigo-600 text-white px-4 py-1 rounded 
+            focus:outline-none focus:ring-2 focus:ring-orange-500">Filtrar</button>
   </form>
 
-  {% if eventos_carrossel is defined and eventos_carrossel %}
+  {% if eventos_carrossel %}
+  <!-- Carrossel -->
   <div class="relative bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg overflow-hidden shadow-lg p-8">
-    <div class="relative">
-      <div class="overflow-hidden">
-        <div id="carouselSlides" class="flex" style="transition: transform 0.5s ease-in-out;">
-          {% for ev in eventos_carrossel %}
-            <div style="min-width: 100%; display: flex; gap: 2rem; align-items: center;">
-              {% if ev.imagem %}
-                <img src="/uploads/{{ ev.imagem }}" alt="{{ ev.titulo }}" style="width: 250px; height: 250px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-              {% endif %}
-              <div style="color: white; flex: 1;">
-                <h3 style="font-size: 28px; font-weight: bold; margin-bottom: 12px;">{{ ev.titulo }}</h3>
-                <p style="margin-bottom: 8px;">📍 {{ ev.cidade }}</p>
-                <p style="margin-bottom: 16px;">📅 {{ ev.data|br_datetime(ev.horario) }}</p>
-                <p style="margin-bottom: 16px; max-height: 60px; overflow: hidden;">{{ ev.descricao }}</p>
-                <a href="{{ url_for('evento.evento_detalhe', evento_id=ev.id) }}" style="display: inline-block; background-color: white; color: #4f46e5; padding: 10px 24px; border-radius: 6px; font-weight: bold; text-decoration: none; focus:outline-none focus:ring-2 focus:ring-orange-500;">
-                  Ver Detalhes
-                </a>
-              </div>
-            </div>
-          {% endfor %}
+    <div class="overflow-hidden">
+      <div id="carouselSlides" class="flex transition-transform duration-500 ease-in-out">
+        {% for ev in eventos_carrossel %}
+        <div class="carousel-item flex gap-4 items-center min-w-full">
+          {% if ev.imagem %}
+          <img src="/uploads/{{ ev.imagem }}" alt="{{ ev.titulo }}" 
+               class="w-64 h-64 object-cover rounded-lg">
+          {% endif %}
+          <div class="flex-1 text-white">
+            <h3 class="text-2xl font-bold mb-2">{{ ev.titulo }}</h3>
+            <p class="mb-1">📍 {{ ev.cidade }}</p>
+            <p class="mb-2">📅 {{ ev.data }} {{ ev.horario_formatado }}</p>
+            <p class="mb-4 max-h-16 overflow-hidden">{{ ev.descricao }}</p>
+            <a href="{{ url_for('evento.evento_detalhe', evento_id=ev.id) }}" 
+               class="inline-block bg-white text-indigo-600 px-6 py-2 rounded font-bold border-2 border-indigo-600
+                      hover:bg-indigo-600 hover:text-white transition focus:outline-none focus:ring-2 focus:ring-orange-500">
+               Ver Detalhes
+            </a>
+          </div>
         </div>
+        {% endfor %}
       </div>
-
-      <button onclick="slideCarousel(-1)" class="focus:outline-none focus:ring-2 focus:ring-orange-500" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); background: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 28px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 10;">‹</button>
-      <button onclick="slideCarousel(1)" class="focus:outline-none focus:ring-2 focus:ring-orange-500" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 28px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 10;">›</button>
     </div>
+    <button onclick="slideCarousel(-1)" class="carousel-button left">‹</button>
+    <button onclick="slideCarousel(1)" class="carousel-button right">›</button>
   </div>
 
+  <!-- Lista de todos os eventos -->
   <div class="mt-12">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-indigo-500 inline-block">Explorar Eventos</h2>
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-indigo-500 inline-block">Todos os Eventos</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for ev in eventos %}
-        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-          <div class="h-48 overflow-hidden">
-            {% if ev.imagem %}
-              <img src="/uploads/{{ ev.imagem }}" class="w-full h-full object-cover">
-            {% else %}
-              <div class="w-full h-full bg-indigo-100 flex items-center justify-center text-indigo-300">🎭</div>
-            {% endif %}
-          </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-gray-900 mb-2 truncate">{{ ev.titulo }}</h3>
-            <p class="text-sm text-gray-600 mb-1">📍 {{ ev.cidade }}</p>
-            <p class="text-sm text-gray-600 mb-4">📅 {{ ev.data|br_datetime(ev.horario) }}</p>
-            <a href="{{ url_for('evento.evento_detalhe', evento_id=ev.id) }}" class="block text-center bg-indigo-50 text-indigo-600 font-bold py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500">Ver Detalhes</a>
-          </div>
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 card">
+        <div class="h-48 overflow-hidden">
+          {% if ev.imagem %}
+          <img src="/uploads/{{ ev.imagem }}" class="w-full h-full object-cover">
+          {% else %}
+          <div class="w-full h-full bg-indigo-100 flex items-center justify-center text-indigo-300">🎭</div>
+          {% endif %}
         </div>
+        <div class="p-5">
+          <h3 class="text-xl font-bold text-gray-900 mb-2 truncate">{{ ev.titulo }}</h3>
+          <p class="text-sm text-gray-600 mb-1">📍 {{ ev.cidade }}</p>
+          <p class="text-sm text-gray-600 mb-4">📅 {{ ev.data }} {{ ev.horario_formatado }}</p>
+          <a href="{{ url_for('evento.evento_detalhe', evento_id=ev.id) }}" 
+             class="block text-center bg-indigo-50 text-indigo-600 font-bold py-2 rounded-lg
+                    hover:bg-indigo-600 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 btn">
+             Ver Detalhes
+          </a>
+        </div>
+      </div>
       {% endfor %}
     </div>
   </div>
 
   {% else %}
-    <p class="text-center py-10 text-gray-500">Nenhum evento encontrado.</p>
+  <p class="text-center py-10 text-gray-500">Nenhum evento encontrado.</p>
   {% endif %}
 </div>
 
-<div id="carousel"
-     data-total-slides="{{ eventos_carrossel | default([]) | length }}">
-</div>
+<div id="carousel" data-total-slides="{{ eventos_carrossel | default([]) | length }}"></div>
 
 <script>
 let carouselIndex = 0;
-
-const carouselEl = document.getElementById('carousel');
-const totalSlides = Number(carouselEl?.dataset?.totalSlides || 0);
+const totalSlides = Number(document.getElementById('carousel')?.dataset?.totalSlides || 0);
 
 function updateCarousel() {
     if (totalSlides === 0) return;
     const slides = document.getElementById('carouselSlides');
-    if (!slides) return;
     slides.style.transform = `translateX(-${carouselIndex * 100}%)`;
 }
 

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Criar Evento{% endblock %}
 {% block content %}
-  <div class="max-w-6xl mx-auto p-6">
+  <div class="max-w-6xl mx-auto p-6 fade-in-up">
     <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
@@ -18,7 +18,7 @@
         </div>
         <div>
           <label for="horario">Horário</label>
-          <input type="time" name="horario" id="horario" required class="border rounded px-3 py-2 w-full focus:border-orange-500 focus:ring-orange-500">
+          <input type="time" name="horario" id="horario" required class="border rounded px-3 py-2 w-full focus:border-orange-500   focus:ring-orange-500">
         </div>
         <div>
           <label for="endereco">Endereço</label>
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="mt-6 text-center">
-        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-orange-500 btn btn-ripple">
           Criar Evento
         </button>
       </div>

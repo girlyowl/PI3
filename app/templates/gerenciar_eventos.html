@@ -18,7 +18,7 @@
 
     {% if eventos %}
       {% for evento in eventos %}
-      <div class="bg-white p-4 shadow rounded-lg mb-4 flex justify-between items-center">
+      <div class="bg-white p-4 shadow rounded-lg mb-4 flex justify-between items-center card fade-in-up">
         <div>
           <h2 class="text-lg font-semibold text-gray-800">{{ evento.titulo }}</h2>
           <p class="text-sm text-gray-600">
@@ -27,7 +27,9 @@
         </div>
         <div class="flex space-x-2">
           <a href="{{ url_for('evento.editar_evento', evento_id=evento.id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500">Editar</a>
-          <a href="{{ url_for('evento.excluir_evento', evento_id=evento.id) }}" onclick="return confirm('Tem certeza que deseja excluir este evento?');" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500">Excluir</a>
+          <form method="POST" action="{{ url_for('evento.excluir_evento', evento_id=evento.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este evento?');">
+            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500">Excluir</button>
+          </form>
         </div>
       </div>
       {% endfor %}

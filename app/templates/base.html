@@ -5,46 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Baixada em Cena{% endblock %}</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='styles.css/styles.css') }}" rel="stylesheet">
 </head>
 <body class="bg-gray-50 min-h-screen">
-<header class="bg-[#4C32CC] text-white p-4 w-full shadow-md">
-  <div class="max-w-7xl mx-auto flex justify-between items-center">
-    <div>
-      <a href="{{ url_for('main.index') }}" class="text-3xl font-semibold text-black">
-🎭 <span class="ml-1">Baixada em Cena</span>
-</a>
+<header class="bg-[#4C32CC] text-white p-3 md:p-4 w-full shadow-md sticky top-0 z-40 transition-all duration-300">
+  <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap md:flex-nowrap">
+    <!-- Logo + Mobile Menu Button -->
+    <div class="flex items-center gap-2 min-w-max">
+      <button id="mobileMenuButton"
+        class="md:hidden flex flex-col justify-center items-center w-12 h-12 rounded-full bg-white/25 hover:bg-white/40 focus:outline-none focus:ring-2 focus:ring-white"
+        aria-label="Abrir menu">
+        <span class="block w-6 h-0.5 bg-white mb-1"></span>
+        <span class="block w-6 h-0.5 bg-white mb-1"></span>
+        <span class="block w-6 h-0.5 bg-white"></span>
+        </button>
+      <a href="{{ url_for('main.index') }}" class="text-xl md:text-3xl font-semibold text-black hover:text-purple-700 transition">
+        🎭 <span class="hidden sm:inline">Baixada em Cena</span>
+      </a>
     </div>
-      <form method="GET" action="{{ url_for('main.index') }}" class="flex items-center bg-white rounded-full shadow px-3 py-1 w-96"> <input 
-    type="text" 
-    name="query" 
-    placeholder="Pesquisar eventos, artistas, locais..." 
-    value="{{ query if query is defined else '' }}"
-    class="flex-grow px-3 py-2 outline-none text-gray-700 rounded-full"
-  />
 
-  <button 
-    type="submit" 
-    class="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-orange-500">
-    Buscar
-  </button>
+    <!-- Desktop Search Bar -->
+    <form method="GET" action="{{ url_for('main.index') }}" class="hidden md:flex items-center bg-white rounded-full shadow px-3 py-1 flex-grow max-w-lg transition-all duration-300 hover:shadow-lg">
+      <input
+        type="text"
+        name="query"
+        placeholder="Pesquisar eventos, artistas, locais..."
+        value="{{ query if query is defined else '' }}"
+        class="flex-grow px-3 py-2 text-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+      />
+      <button
+        type="submit"
+        class="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-orange-500"
+      >
+        Buscar
+      </button>
+    </form>
 
-</form>
-    <div class="flex items-center space-x-3" role="navigation" aria-label="Menu principal">
-      
+    <!-- Desktop Navigation -->
+    <nav id="desktopNav" class="hidden md:flex items-center gap-2 whitespace-nowrap" role="navigation" aria-label="Menu principal">
       {% if session.get('logado') %}
-        <span class="text-white text-sm">Bem-vindo, {{ session.get('usuario_nome') }}</span>
-        <a href="{{ url_for('evento.criar_eventos') }}" class="bg-indigo-600 text-white px-3 py-1 text-sm rounded-md shadow hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Criar Evento</a>
-        <a href="{{ url_for('main.gerenciar_eventos') }}" class="bg-indigo-600 text-white px-3 py-1 text-sm rounded-md shadow hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Gerenciar</a>
+        <span class="text-white text-xs lg:text-sm">Bem-vindo, {{ session.get('usuario_nome') }}</span>
+        <a href="{{ url_for('evento.criar_eventos') }}" class="bg-indigo-600 text-white px-2 lg:px-3 py-1 text-xs lg:text-sm rounded-md shadow hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Criar Evento</a>
+        <a href="{{ url_for('main.gerenciar_eventos') }}" class="bg-indigo-600 text-white px-2 lg:px-3 py-1 text-xs lg:text-sm rounded-md shadow hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Gerenciar</a>
         {% if session.get('usuario_tipo') == 'admin' %}
-          <a href="{{ url_for('admin.painel_admin') }}" class="bg-red-600 text-white px-3 py-1 text-sm rounded-md shadow hover:bg-red-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Painel Admin</a>
+          <a href="{{ url_for('admin.painel_admin') }}" class="bg-red-600 text-white px-2 lg:px-3 py-1 text-xs lg:text-sm rounded-md shadow hover:bg-red-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Painel Admin</a>
         {% endif %}
-        <a href="{{ url_for('auth.logout') }}" class="bg-red-100 text-red-600 px-3 py-1 text-sm rounded-md shadow hover:bg-red-200 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Sair</a>
+        <a href="{{ url_for('auth.logout') }}" class="bg-red-100 text-red-600 px-2 lg:px-3 py-1 text-xs lg:text-sm rounded-md shadow hover:bg-red-200 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Sair</a>
       {% else %}
         <a href="{{ url_for('auth.login') }}" class="bg-indigo-600 text-white px-3 py-1 text-sm rounded-md shadow hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Login</a>
       {% endif %}
+    </nav>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div id="mobileNav" class="hidden md:hidden mt-3 bg-white/10 rounded-xl p-3 backdrop-blur-lg">
+    <form method="GET" action="{{ url_for('main.index') }}" class="flex items-center gap-2 mb-3">
+      <input
+        type="text"
+        name="query"
+        placeholder="Pesquisar eventos, artistas, locais..."
+        value="{{ query if query is defined else '' }}"
+        class="flex-grow px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500"
+      />
+      <button type="submit" class="bg-indigo-600 text-white px-3 py-2 rounded-full text-sm">Buscar</button>
+    </form>
+    <div class="flex flex-col gap-2" role="navigation" aria-label="Menu mobile">
+      {% if session.get('logado') %}
+        <span class="text-white text-sm font-semibold">Bem-vindo, {{ session.get('usuario_nome') }}</span>
+        <a href="{{ url_for('evento.criar_eventos') }}" class="bg-indigo-600 text-white px-3 py-2 text-sm rounded-md hover:bg-indigo-700 transition">Criar Evento</a>
+        <a href="{{ url_for('main.gerenciar_eventos') }}" class="bg-indigo-600 text-white px-3 py-2 text-sm rounded-md hover:bg-indigo-700 transition">Gerenciar</a>
+        {% if session.get('usuario_tipo') == 'admin' %}
+          <a href="{{ url_for('admin.painel_admin') }}" class="bg-red-600 text-white px-3 py-2 text-sm rounded-md hover:bg-red-700 transition">Painel Admin</a>
+        {% endif %}
+        <a href="{{ url_for('auth.logout') }}" class="bg-red-100 text-red-600 px-3 py-2 text-sm rounded-md hover:bg-red-200 transition">Sair</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="bg-indigo-600 text-white px-3 py-2 text-sm rounded-md hover:bg-indigo-700 transition">Login</a>
+      {% endif %}
     </div>
   </div>
-</header>
 <main id="main-content" role="main" tabindex="-1" class="p-6">
   {% block content %}{% endblock %}
 </main>
@@ -63,5 +101,37 @@
 
   </div>
 </footer>
+<script>
+  const mobileMenuButton = document.getElementById('mobileMenuButton');
+  const mobileNav = document.getElementById('mobileNav');
+
+  if (mobileMenuButton && mobileNav) {
+    mobileMenuButton.addEventListener('click', () => {
+      mobileNav.classList.toggle('hidden');
+      mobileMenuButton.setAttribute('aria-expanded', String(!mobileNav.classList.contains('hidden')));
+    });
+  }
+
+  if ('scrollBehavior' in document.documentElement.style) {
+    document.documentElement.style.scrollBehavior = 'smooth';
+  }
+
+  function updateHeaderOnScroll() {
+    const header = document.querySelector('header');
+    if (!header) return;
+    if (window.scrollY > 10) {
+      header.classList.add('shadow-lg');
+    } else {
+      header.classList.remove('shadow-lg');
+    }
+  }
+
+  window.addEventListener('scroll', updateHeaderOnScroll);
+  updateHeaderOnScroll();
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('reduce-motion');
+  }
+</script>
 </body>
 </html>

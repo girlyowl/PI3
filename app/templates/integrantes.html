@@ -23,9 +23,17 @@
   <div class="max-w-7xl mx-auto">
     <h2 class="text-xl font-semibold text-center text-blue-700 mb-8">👥 Integrantes do Projeto</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for integrante in integrantes %}
+      {% set integrantes_list = [
+        {"nome": "Natália Silva", "ra": "12345678", "descricao": "Desenvolvimento Frontend"},
+        {"nome": "João Santos", "ra": "12345679", "descricao": "Desenvolvimento Backend"},
+        {"nome": "Maria Oliveira", "ra": "12345680", "descricao": "Design UX/UI"},
+        {"nome": "Pedro Costa", "ra": "12345681", "descricao": "Banco de Dados"}
+      ] %}
+      {% for integrante in integrantes_list %}
         <div class="bg-white rounded-xl shadow hover:shadow-md transition-transform transform hover:-translate-y-1 p-4 text-center">
-          <img src="/static/uploads/integrante{{ loop.index }}.jpg" alt="{{ integrante.nome }}" class="w-28 h-36 object-cover mx-auto mb-3 rounded-lg border border-gray-300 shadow-sm" />
+          <div class="w-28 h-36 object-cover mx-auto mb-3 rounded-lg border border-gray-300 shadow-sm bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+            <span class="text-5xl">👤</span>
+          </div>
           <p class="font-medium text-gray-900 text-sm">{{ integrante.nome }}</p>
           <p class="text-xs text-gray-500 mb-1">RA: {{ integrante.ra }}</p>
           <p class="text-xs text-gray-700 italic">{{ integrante.descricao }}</p>
